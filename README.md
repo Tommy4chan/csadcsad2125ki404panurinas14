@@ -1,5 +1,5 @@
 # Details about repository
-This repository contains a project for a hardware-based Rock Paper Scissors game using Arduino Nano and Js. The game logic and decision-making will run primarily on the Arduino Nano, while the React application will serve as a graphical interface for users to interact with the game.
+This repository contains a project for a hardware-based Rock Paper Scissors game using Arduino Nano and JavaScript React application. The game logic and decision-making will run primarily on the Arduino Nano, while the React application will serve as a graphical interface for users to interact with the game.
  
 
 ## Student details
@@ -17,21 +17,27 @@ This repository contains a project for a hardware-based Rock Paper Scissors game
 
 ### Programming Languages
 - **C/C++**: Used in the Arduino environment to develop the Rock Paper Scissors game logic.
-- **Js**: Used for client app with React
+- **JavaScript**: Used for client app with React
 
 ### Communication
 - **Serial Communication**: The Arduino will communicate with the app through a UART serial port to send and receive game status and input data.
 --- 
 
-### To Build and Run the Client (Js/React Application):
+### To Build and Run the Client (JS/React Application):
 
-1. Fetch feature/develop/task2 branch
-2. Navigate to csad2425ki404panurinas14/client-rock-paper-scissors
-3. Install dependencies by typing npm install
-4. Run the application by npm run dev
+1. Fetch **feature/develop/task2** branch
+2. Navigate to **csad2425ki404panurinas14/client-rock-paper-scissors**
+3. Install dependencies by typing 
+```
+npm install
+```
+4. Run the application by typing 
+```
+npm run dev
+```
 
 ### To Build and Run the Server (Arduino Sketch):
 
-1. Open folder csad2425ki404panurinas14/server-rock-paper-scissors with PlatformIO extension
+1. Open folder **csad2425ki404panurinas14/server-rock-paper-scissors** with PlatformIO extension
 2. Plug into the computer your Arduino Nano board (board can be changed in platformio.ini file)
 3. Program controller by pressing the upload button
