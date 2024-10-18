@@ -17,18 +17,18 @@ jobs:
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # Step 2: Set up Node.js environment
+      # Step 2: Set up Node.js environment (Node.js 20)
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       # Step 3: Install dependencies for the React Vite app
       - name: Install dependencies
         run: npm install
-        working-directory: client-rock-paper-scissors  # Ensure it's the client directory
+        working-directory: client-rock-paper-scissors
 
       # Step 4: Run Jest tests
       - name: Run Jest tests
@@ -42,7 +42,7 @@ jobs:
 
       # Step 6: Upload build artifacts
       - name: Upload Vite build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: client-build
           path: client-rock-paper-scissors/dist
@@ -52,23 +52,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the repository
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    # Step 2: Install PlatformIO
-    - name: Install PlatformIO
-      run: |
-        python3 -m pip install -U platformio
+      # Step 2: Install PlatformIO
+      - name: Install PlatformIO
+        run: |
+          python3 -m pip install -U platformio
 
-    # Step 3: Build PlatformIO project
-    - name: Build PlatformIO project
-      run: pio run
-      working-directory: server-rock-paper-scissors
+      # Step 3: Build PlatformIO project
+      - name: Build PlatformIO project
+        run: pio run
+        working-directory: server-rock-paper-scissors
 
-    # Step 4: Upload PlatformIO build artifacts
-    - name: Upload PlatformIO build artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: server-build
-        path: server-rock-paper-scissors/.pio/build/*
+      # Step 4: Upload PlatformIO build artifacts
+      - name: Upload PlatformIO build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-build
+          path: server-rock-paper-scissors/.pio/build/*
