@@ -1,0 +1,74 @@
+name: CI React Vite and PlatformIO
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  # Job for building and testing the React Vite client project
+  client-build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js environment (Node.js 20)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step 3: Install dependencies for the React Vite app
+      - name: Install dependencies
+        run: npm install
+        working-directory: client-rock-paper-scissors
+
+      # Step 4: Run Jest tests
+      - name: Run Jest tests
+        run: npm run test
+        working-directory: client-rock-paper-scissors
+
+      # Step 5: Run Vite build
+      - name: Build Vite project
+        run: npm run build
+        working-directory: client-rock-paper-scissors
+
+      # Step 6: Upload build artifacts
+      - name: Upload Vite build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-build
+          path: client-rock-paper-scissors/dist
+
+  # Job for building the PlatformIO project
+  server-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install PlatformIO
+      - name: Install PlatformIO
+        run: |
+          python3 -m pip install -U platformio
+
+      # Step 3: Build PlatformIO project
+      - name: Build PlatformIO project
+        run: pio run
+        working-directory: server-rock-paper-scissors
+
+      # Step 4: Upload PlatformIO build artifacts
+      - name: Upload PlatformIO build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-build
+          path: server-rock-paper-scissors/.pio/build/*
