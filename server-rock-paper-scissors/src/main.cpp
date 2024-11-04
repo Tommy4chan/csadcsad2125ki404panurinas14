@@ -1,8 +1,8 @@
-#include <ArduinoJson.h> // Include the ArduinoJson library
+#include <ArduinoJson.h>
 
 JsonDocument doc;
 String jsonString;
-JsonDocument gameOutcome;
+JsonDocument winConditions;
 
 String randomChoice()
 {
@@ -24,12 +24,9 @@ String randomChoice()
 void setup()
 {
 	Serial.begin(9600);
-	gameOutcome["RockScissors"] = 1;
-	gameOutcome["RockPaper"] = 2;
-	gameOutcome["ScissorsRock"] = 2;
-	gameOutcome["ScissorsPaper"] = 1;
-	gameOutcome["PaperRock"] = 1;
-	gameOutcome["PaperScissors"] = 2;
+	winConditions["Rock"] = "Scissors";
+	winConditions["Scissors"] = "Paper";
+	winConditions["Paper"] = "Rock";
 }
 
 void loop()
@@ -70,18 +67,19 @@ void loop()
 				player2Choice = randomChoice();
 			}
 
-			int winner;
+			int winner = 2;
+
 			if (player1Choice == player2Choice)
 			{
 				winner = 3;
 			}
-			else
+			else if (winConditions[player1Choice] == player2Choice)
 			{
-				winner = gameOutcome[player1Choice + player2Choice];
+				winner = 1;
 			}
 
 			response["winner"] = winner;
-
+			
 			response["player1Choice"] = player1Choice;
 			response["player2Choice"] = player2Choice;
 
