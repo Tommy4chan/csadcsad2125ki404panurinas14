@@ -1,7 +1,7 @@
 # Project details
 PROJECT_NAME           = "csad2425ki404panurinas14"
 PROJECT_BRIEF          = "Documentation for C++ server"
-OUTPUT_DIRECTORY       = ./docs
+OUTPUT_DIRECTORY       = ../docs/server-docs
 QUIET                  = NO
 
 # Input
