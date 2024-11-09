@@ -5,18 +5,60 @@ import React, { createContext, useContext, useEffect, useRef, useState } from "r
 // https://reillyeon.github.io/serial/#onconnect-attribute-0
 // https://codelabs.developers.google.com/codelabs/web-serial
 
+/**
+ * @file SerialProvider.js
+ * @module SerialProvider
+ * 
+ * Provides serial communication capabilities.
+ */
+
+/**
+ * @typedef {Object} SerialContextValue
+ * @property {boolean} canUseSerial Indicates if the serial API is available.
+ * @property {boolean} hasTriedAutoconnect Indicates if an attempt to auto-connect has been made.
+ * @property {Function} connect Function to manually connect to the serial port.
+ * @property {Function} disconnect Function to manually disconnect from the serial port.
+ * @property {string} portState The current state of the serial port ("closed", "opening", "open", "closing").
+ * @property {Function} send Function to send data through the serial port.
+ * @property {Function} subscribe Function to subscribe to serial port events.
+ */
+
+/**
+ * Context for managing serial port connections.
+ * 
+ * @type {React.Context<SerialContextValue>}
+ */
 const SerialContext = createContext({
   canUseSerial: false,
   hasTriedAutoconnect: false,
   connect: () => Promise.resolve(false),
-  disconnect: () => { },
+  disconnect: () => {},
   portState: "closed",
   send: () => Promise.resolve(false),
-  subscribe: () => () => { }
+  subscribe: () => () => {}
 });
 
+/**
+ * Hook to access the SerialContext.
+ * @returns {SerialContextValue} The serial context values.
+ */
 export const useSerial = () => useContext(SerialContext);
 
+/**
+ * SerialProvider component that provides serial communication capabilities.
+ * It manages the state of the serial port, handles connection and disconnection,
+ * and allows subscribing to incoming data.
+ *
+ * @component
+ * @param {Object} props The component props.
+ * @param {React.ReactNode} props.children The child components to be wrapped by the provider.
+ * @returns {JSX.Element} The SerialProvider component.
+ *
+ * @example
+ * <SerialProvider>
+ *   <YourComponent />
+ * </SerialProvider>
+ */
 const SerialProvider = ({ children }) => {
   const [canUseSerial] = useState(() => "serial" in navigator);
   const [portState, setPortState] = useState("closed");
@@ -30,16 +72,28 @@ const SerialProvider = ({ children }) => {
   const currentSubscriberIdRef = useRef(0);
   const subscribersRef = useRef(new Map());
 
+  /**
+   * Subscribes to incoming data from the serial port.
+   * 
+   * @param {Function} callback The callback function to handle incoming data.
+   * @returns {Function} Unsubscribe function to stop receiving data.
+   */
   const subscribe = (callback) => {
     const id = currentSubscriberIdRef.current;
     subscribersRef.current.set(id, callback);
     currentSubscriberIdRef.current++;
-
     return () => {
       subscribersRef.current.delete(id);
     };
   };
 
+  /**
+   * Sends data through the serial port.
+   * 
+   * @async
+   * @param {Object} data The data to send.
+   * @returns {Promise<void>} Resolves when the data is sent.
+   */
   const send = async (data) => {
     if (portRef.current && portState === "open") {
       const encoder = new TextEncoder();
@@ -57,13 +111,20 @@ const SerialProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Reads data from the serial port until it is closed.
+   * 
+   * @async
+   * @param {SerialPort} port The serial port to read from.
+   * @returns {Promise<void>} Resolves when the port is closed.
+   */
   const readUntilClosed = async (port) => {
     if (port.readable) {
       const textDecoder = new TextDecoderStream();
       const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
       readerRef.current = textDecoder.readable.getReader();
 
-      let buffer = ""; // Buffer to hold incoming data
+      let buffer = "";
 
       try {
         while (true) {
@@ -71,20 +132,18 @@ const SerialProvider = ({ children }) => {
           if (done) {
             break;
           }
-
-          buffer += value; // Accumulate incoming data into the buffer
+          buffer += value;
           let boundaryIndex;
 
-          // Process complete messages
           while ((boundaryIndex = buffer.indexOf('\n')) !== -1) {
-            const jsonString = buffer.slice(0, boundaryIndex); // Extract the complete message
-            buffer = buffer.slice(boundaryIndex + 1); // Remove the processed message from the buffer
+            const jsonString = buffer.slice(0, boundaryIndex);
+            buffer = buffer.slice(boundaryIndex + 1);
 
             try {
-              const message = jsonString; // Parse the JSON message
+              const message = jsonString;
               const timestamp = Date.now();
               Array.from(subscribersRef.current).forEach(([_, callback]) => {
-                callback({ value: message, timestamp }); // Send the parsed message to subscribers
+                callback({ value: message, timestamp });
               });
             } catch (e) {
               console.error("Failed to parse JSON:", e);
@@ -96,8 +155,7 @@ const SerialProvider = ({ children }) => {
       } finally {
         readerRef.current.releaseLock();
       }
-
-      await readableStreamClosed.catch(() => { }); // Ignore errors
+      await readableStreamClosed.catch(() => {});
     }
   };
 
