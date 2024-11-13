@@ -4,6 +4,19 @@ import { useSerial } from '../utils/SerialProvider';
 
 const choices = ['Rock', 'Paper', 'Scissors'];
 
+/**
+ * Game component for playing Rock-Paper-Scissors.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.mode - The game mode, either 'human-human', 'human-ai', or 'ai-ai'.
+ *
+ * @returns {JSX.Element} The rendered component.
+ *
+ * @example
+ * <Game mode="human-human" />
+ *
+ * @component
+ */
 const Game = ({ mode }) => {
 
   const {

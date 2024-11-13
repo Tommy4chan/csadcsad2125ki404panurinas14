@@ -4,6 +4,16 @@ import GameModeSelector from './components/GameModeSelector';
 import Game from './components/Game';
 import Serial from './components/Serial';
 
+/**
+ * The main component of the Rock-Paper-Scissors application.
+ * 
+ * This component handles the overall layout and state management for the game.
+ * It uses the `useSerial` hook to manage the serial port connection state and 
+ * conditionally renders the game interface based on the connection status.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ */
 const App = () => {
   const [mode, setMode] = useState(null);
 

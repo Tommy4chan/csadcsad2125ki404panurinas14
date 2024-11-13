@@ -1,6 +1,19 @@
 import React from 'react'
 import { useSerial } from '../utils/SerialProvider';
 
+/**
+ * Serial component that provides an interface for connecting and disconnecting
+ * to a serial port. It uses the `useSerial` hook to manage the serial port state
+ * and connection status.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered Serial component.
+ *
+ * @example
+ * return (
+ *   <Serial />
+ * )
+ */
 const Serial = () => {
   const {
     canUseSerial,

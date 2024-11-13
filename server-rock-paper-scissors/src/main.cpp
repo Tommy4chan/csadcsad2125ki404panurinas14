@@ -24,6 +24,15 @@ float hiddenWeights[8][3] = {
 float hiddenBias[8] = {-0.211966, 0.226446, -0.129866, 0.805082, 0.822114, -0.379106, -0.669373, 1.362221};
 float outputBias[3] = {-0.727954, 0.467537, 0.264352};
 
+/**
+ * @brief Converts a numeric choice to its corresponding move in the game "Rock, Paper, Scissors".
+ * 
+ * @param choice An integer representing the player's choice:
+ *               0 for Rock,
+ *               1 for Paper,
+ *               2 for Scissors.
+ * @return String The corresponding move as a string ("Rock", "Paper", or "Scissors").
+ */
 String moveToString(int choice)
 {
     if (choice == 0)
@@ -33,11 +42,31 @@ String moveToString(int choice)
     return "Scissors";
 }
 
+/**
+ * @brief Applies the Rectified Linear Unit (ReLU) activation function.
+ *
+ * The ReLU function returns the input value if it is greater than zero,
+ * otherwise it returns zero. It is commonly used in neural networks to
+ * introduce non-linearity.
+ *
+ * @param x The input value.
+ * @return The output of the ReLU function.
+ */
 float relu(float x)
 {
     return x > 0 ? x : 0;
 }
 
+/**
+ * @brief Computes the softmax of an array of floats.
+ *
+ * The softmax function is a type of squashing function that maps an input array of real numbers
+ * to an array of values between 0 and 1 that sum to 1. This is often used in machine learning
+ * for converting raw scores (logits) into probabilities.
+ *
+ * @param x The input array of floats. The array is modified in place to contain the softmax values.
+ * @param size The size of the input array.
+ */
 void softmax(float x[], int size)
 {
     float max_val = x[0];
@@ -51,6 +80,15 @@ void softmax(float x[], int size)
         x[i] = exp(x[i] - max_val) / sum;
 }
 
+/**
+ * @brief Predicts the next move in a rock-paper-scissors game based on the last moves.
+ *
+ * This function uses a simple neural network with one hidden layer to predict the next move.
+ * The network consists of an input layer with 3 neurons, a hidden layer with 8 neurons, and an output layer with 3 neurons.
+ * The activation function used in the hidden layer is ReLU, and the output layer uses softmax to produce probabilities.
+ *
+ * @return A string representing the predicted move ("rock", "paper", or "scissors").
+ */
 String predict()
 {
     float output[3];
@@ -86,11 +124,32 @@ String predict()
     return moveToString(best_move);
 }
 
+/**
+ * @brief Generates a random choice for a rock-paper-scissors game.
+ * 
+ * This function generates a random integer between 0 and 2 (inclusive),
+ * converts it to the corresponding string representation of "rock", "paper",
+ * or "scissors", and returns it.
+ * 
+ * @return String The string representation of the random choice.
+ */
 String randomChoice()
 {
     return moveToString(random(3));
 }
 
+/**
+ * @brief Converts the player's choice from a string to an integer.
+ * 
+ * This function takes a string representing the player's choice in a 
+ * rock-paper-scissors game and converts it to an integer. The mapping is as follows:
+ * - "Rock" -> 0
+ * - "Paper" -> 1
+ * - "Scissors" -> 2
+ * 
+ * @param choice The player's choice as a string. It should be one of "Rock", "Paper", or "Scissors".
+ * @return int The integer representation of the player's choice.
+ */
 int playerChoiceToInt(String choice)
 {
     if (choice == "Rock")
@@ -100,6 +159,15 @@ int playerChoiceToInt(String choice)
     return 2;
 }
 
+/**
+ * @brief Adds a new player move to the list of last moves.
+ * 
+ * This function shifts the existing moves in the `lastMoves` array to the right
+ * and inserts the new move at the beginning of the array. The oldest move is 
+ * discarded if the array is full.
+ * 
+ * @param newMove The new move to be added to the list of last moves.
+ */
 void addPlayerMove(int newMove) {
     for (int i = 3 - 1; i > 0; --i) {
         lastMoves[i] = lastMoves[i - 1];
@@ -121,6 +189,28 @@ void setup()
     }
 }
 
+/**
+ * @brief Main loop function that reads from the serial input, processes JSON data, 
+ *        and determines the winner of a rock-paper-scissors game.
+ * 
+ * This function continuously checks for available data on the serial input. When data is available,
+ * it reads characters and appends them to a JSON string. Once a complete JSON object is detected 
+ * (indicated by the '}' character), it attempts to deserialize the JSON string into a JsonDocument.
+ * 
+ * If deserialization fails, it sends an error message back via the serial output. If successful, 
+ * it extracts player choices from the JSON document. If a player choice is missing, it generates 
+ * a random choice or predicts the next move based on previous moves.
+ * 
+ * The function then determines the winner based on predefined win conditions and sends the result 
+ * back via the serial output in JSON format.
+ * 
+ * @note The function assumes the existence of several helper functions and variables:
+ *       - randomChoice(): Generates a random choice for the player.
+ *       - predict(): Predicts the next move based on previous moves.
+ *       - addPlayerMove(int): Records the player's move.
+ *       - playerChoiceToInt(String): Converts a player's choice to an integer.
+ *       - winConditions: A map or dictionary that defines the win conditions.
+ */
 void loop()
 {
     while (Serial.available())

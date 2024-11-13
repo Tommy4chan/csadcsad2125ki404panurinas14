@@ -1,0 +1,41 @@
+# Project details
+PROJECT_NAME           = "csad2425ki404panurinas14"
+PROJECT_BRIEF          = "Documentation for C++ server"
+OUTPUT_DIRECTORY       = ../docs/server-docs
+QUIET                  = NO
+
+# Input
+INPUT                  = ./src
+FILE_PATTERNS          = *.cpp *.h
+RECURSIVE              = YES
+
+# Output
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+HTML_OUTPUT            = html
+HTML_TIMESTAMP         = YES
+GENERATE_TREEVIEW      = YES
+
+# Source Browser
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = YES
+REFERENCES_RELATION    = YES
+
+# Documentation extraction settings
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+JAVADOC_AUTOBRIEF      = YES
+
+# Markdown
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+
+# Predefined Macros (adjust as needed for React)
+PREDEFINED             = \
+  "REACT_APP_VERSION=1.0" \
+  "VITE_ENV_PRODUCTION"
+
+# Language-specific optimization
+OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_CPLUSPLUS = YES

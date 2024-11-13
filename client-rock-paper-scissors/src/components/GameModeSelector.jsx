@@ -1,5 +1,13 @@
 import React from 'react';
 
+/**
+ * GameModeSelector component allows the user to select the game mode.
+ *
+ * @param {Object} props - The component props.
+ * @param {Function} props.setMode - Function to set the selected game mode.
+ *
+ * @returns {JSX.Element} The rendered component.
+ */
 const GameModeSelector = ({ setMode }) => {
   return (
     <div className="flex justify-center mb-4">
