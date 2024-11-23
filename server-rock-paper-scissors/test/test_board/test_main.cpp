@@ -42,7 +42,7 @@ void test_playerChoiceToInt() {
     TEST_ASSERT_EQUAL(2, playerChoiceToInt("Scissors"));
 }
 
-void setup() {
+int runUnityTests(void) {
     UNITY_BEGIN();
     RUN_TEST(test_moveToString);
     RUN_TEST(test_relu);
@@ -50,7 +50,13 @@ void setup() {
     RUN_TEST(test_predict);
     RUN_TEST(test_addPlayerMove);
     RUN_TEST(test_playerChoiceToInt);
-    UNITY_END();
+    return UNITY_END();
+}
+
+void setup() {
+  delay(2000);
+
+  runUnityTests();
 }
 
 void loop() {}
