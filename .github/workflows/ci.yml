@@ -32,7 +32,7 @@ jobs:
 
       # Step 4: Run Jest tests
       - name: Run Jest tests
-        run: npm run test
+        run: npm run test -- --no-color > dist/results.txt
         working-directory: client-rock-paper-scissors
 
       # Step 5: Run Vite build
