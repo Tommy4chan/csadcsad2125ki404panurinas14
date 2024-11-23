@@ -2,7 +2,6 @@
 #define GAME_LOGIC_H
 
 #include <ArduinoJson.h>
-#include <String.h>
 
 extern int lastMoves[3];
 extern float inputWeights[3][8];
