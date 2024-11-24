@@ -32,7 +32,7 @@ jobs:
 
       # Step 4: Run Jest tests
       - name: Run Jest tests
-        run: npm run test
+        run: npm run test -- --no-color > tests/results.txt
         working-directory: client-rock-paper-scissors
 
       # Step 5: Run Vite build
@@ -46,6 +46,13 @@ jobs:
         with:
           name: client-build
           path: client-rock-paper-scissors/dist
+
+      # Step 7: Upload tests artifacts
+      - name: Upload Vite build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: client-build-tests
+          path: client-rock-paper-scissors/tests/results.txt
 
   # Job for building the PlatformIO project
   server-build:
